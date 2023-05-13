@@ -1,19 +1,36 @@
-import {useEffect, useRef,  useState} from 'react';
+import { useEffect, useRef, useState } from "react";
 
 const SimpleInput = (props) => {
-  const nameInputRef = useRef("");
+  // const nameInputRef = useRef("");
   const [enteredName, setEnteredName] = useState("");
-  const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
+  // const [enteredNameIsValid, setEnteredNameIsValid] = useState(false);
   const [enteredNameTouched, setEnteredNameTouched] = useState(false);
 
-  useEffect(()=>{
-    if(enteredNameIsValid){
-      console.log('Name is Valid');
-    }
-  },[enteredNameIsValid]);
+  const enteredNameIsValid = enteredName.trim() !== '';
+  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
 
-  const nameInputChangeHandler = event => {
+  // useEffect(() => {
+  //   if (enteredNameIsValid) {
+  //     console.log("Name is Valid");
+  //   }
+  // }, [enteredNameIsValid]);
+
+  const nameInputChangeHandler = (event) => {
     setEnteredName(event.target.value);
+
+    // state는 비동기로 처리되므로 즉각적으로 반영되지 않는다
+    // 최신의 상태를 반영하고 싶다면 event 객체를 쓰자
+    // if (event.target.value.trim() !== "") {
+    //   setEnteredNameIsValid(true);
+    // }
+  };
+
+  const nameInputBlurHandler = (event) => {
+    setEnteredNameTouched(true);
+    
+    // if (enteredName.trim() === "") {
+    //   setEnteredNameIsValid(false);
+    // }
   };
 
   const forSubmissionHandler = (event) => {
@@ -21,27 +38,37 @@ const SimpleInput = (props) => {
     setEnteredNameTouched(true);
     // const enteredValue =  nameInputRef.current.value;
 
-    if(enteredName.trim() === ''){
-      setEnteredNameIsValid(false);
+    if (!enteredNameIsValid) {
+      // setEnteredNameIsValid(false);
       return;
     }
-    // console.log(enteredName);
-    // console.log(enteredValue);
-    setEnteredNameIsValid(true);
 
-    setEnteredName('');
+    // setEnteredNameIsValid(true);
+    
+    setEnteredName("");
   };
-  const nameInputIsInvalid = !enteredNameIsValid && enteredNameTouched;
-  const nameInputClasses = nameInputIsInvalid ? 'form-control invalid' : 'form-control' ;
+
+  const nameInputClasses = nameInputIsInvalid
+    ? "form-control invalid"
+    : "form-control";
 
   return (
     <form onSubmit={forSubmissionHandler}>
       <div className={nameInputClasses}>
         <label htmlFor='name'>Your Name</label>
-        <input ref={nameInputRef} type='text' id='name' onChange={nameInputChangeHandler} value={enteredName} />
-        {nameInputIsInvalid && <p className='error-text'>Name must not be empty.</p> }
+        <input
+          // ref={nameInputRef}
+          type='text'
+          id='name'
+          onChange={nameInputChangeHandler}
+          onBlur={nameInputBlurHandler}
+          value={enteredName}
+        />
+        {nameInputIsInvalid && (
+          <p className='error-text'>Name must not be empty.</p>
+        )}
       </div>
-      <div className="form-actions">
+      <div className='form-actions'>
         <button>Submit</button>
       </div>
     </form>
