@@ -1,6 +1,6 @@
 import classes from './Counter.module.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { counterActions } from '../store';
+import { counterActions } from '../store/counter';
 
 const Counter = () => {
   // useSelector를 이용해서 저장소가 관리하는 데이터에 엑세스할 수 있다
