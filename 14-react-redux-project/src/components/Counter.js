@@ -1,5 +1,6 @@
 import classes from './Counter.module.css';
 import { useSelector, useDispatch } from 'react-redux';
+import { counterActions } from '../store';
 
 const Counter = () => {
   // useSelector를 이용해서 저장소가 관리하는 데이터에 엑세스할 수 있다
@@ -10,19 +11,19 @@ const Counter = () => {
   // redux store에 대한 action을 보낸다
   const dispatch = useDispatch();
   const show = useSelector(state => state.showCounter);
-
+  
   const toggleCounterHandler = () => {
-    dispatch({type:'toggle'});
+    dispatch(counterActions.toggleCounter());
   };
 
   const incrementHandler = () => {
-    dispatch({type: 'increment'});
+    dispatch(counterActions.increment());
   };
   const decrementHandler = () => {
-    dispatch({type: 'decrement'});
+    dispatch(counterActions.decrement());
   }
   const increaseHandler = () => {
-    dispatch({type:'increase', amount : 5});
+    dispatch(counterActions.increase(10));
   }
   return (
     <main className={classes.counter}>
@@ -31,7 +32,7 @@ const Counter = () => {
       <div>
         <button onClick={incrementHandler}>Increment</button>
         <button onClick={decrementHandler}>Decrement</button>
-        <button onClick={increaseHandler}>Increase</button>
+        <button onClick={increaseHandler}>Increase By 10</button>
       </div>
       <button onClick={toggleCounterHandler}>Toggle Counter</button>
     </main>
